@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Для тебя 🤍</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse at top, #1a1b2e 0%, #0c0d1a 70%, #080814 100%);
+      color: #f0f0f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Романтичные звезды на фоне */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .star {
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+    }
+
+    .star:nth-child(odd) {
+      animation: twinkle 4s infinite alternate;
+    }
+
+    .star:nth-child(even) {
+      animation: twinkle 5s infinite alternate-reverse;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    .container {
+      max-width: 720px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Декоративные сердечки */
+    .heart {
+      position: absolute;
+      color: rgba(255, 105, 180, 0.15);
+      font-size: 1.5rem;
+      z-index: -1;
+    }
+
+    .heart:nth-child(1) { top: 5%; left: 8%; }
+    .heart:nth-child(2) { top: 15%; right: 10%; }
+    .heart:nth-child(3) { bottom: 20%; left: 12%; }
+    .heart:nth-child(4) { bottom: 10%; right: 8%; }
+
+    .image-wrapper {
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp 1.8s ease forwards;
+      position: relative;
+      overflow: hidden;
+      border-radius: 22px;
+    }
+
+    .image-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(255, 105, 180, 0.1), rgba(147, 112, 219, 0.1));
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .image-wrapper img {
+      width: 100%;
+      max-height: 420px;
+      object-fit: cover;
+      border-radius: 22px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      filter: brightness(0.9) contrast(1.1);
+      transition: transform 0.8s ease;
+    }
+
+    .image-wrapper:hover img {
+      transform: scale(1.02);
+    }
+
+    /* Стили для письма */
+    .letter {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+      backdrop-filter: blur(12px);
+      border-radius: 22px;
+      padding: 32px 28px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+                  0 20px 50px rgba(0, 0, 0, 0.4);
+      margin-bottom: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .letter::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #ff69b4, #9370db);
+      border-radius: 22px 22px 0 0;
+    }
+
+    .letter p {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 1.2s ease, transform 1.2s ease;
+      line-height: 1.7;
+      font-size: 1.08rem;
+      margin-bottom: 20px;
+      text-align: left;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .letter p::before {
+      content: '❤️';
+      position: absolute;
+      left: 0;
+      top: 2px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    .letter p.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .letter strong {
+      color: #ffd6e7;
+      background: linear-gradient(90deg, #ffb6c1, #ffd6e7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+
+    /* Стили для таймера */
+    .timer {
+      margin-top: 32px;
+      padding: 28px 20px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+      backdrop-filter: blur(12px);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+                  0 20px 50px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      animation: fadeUp 1.6s ease forwards;
+      animation-delay: 5s;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #9370db, #6a5acd);
+      border-radius: 22px 22px 0 0;
+    }
+
+    .timer-title {
+      font-size: 0.95rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #d1d1e9;
+      margin-bottom: 18px;
+      font-weight: 500;
+    }
+
+    .timer-values {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .time-box {
+      min-width: 100px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 16px;
+      padding: 16px 10px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .time-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .time-number {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255, 182, 193, 0.3);
+      margin-bottom: 6px;
+    }
+
+    .time-label {
+      font-size: 0.8rem;
+      color: #b0b0c2;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    footer {
+      margin-top: 36px;
+      font-size: 0.95rem;
+      color: #c5c5e3;
+      opacity: 0;
+      animation: fadeUp 1.4s ease forwards;
+      animation-delay: 5.5s;
+      padding: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+
+    footer::before {
+      content: '💘';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1b2e;
+      padding: 0 15px;
+      font-size: 1.2rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+      .timer-values {
+        gap: 12px;
+      }
+      
+      .time-box {
+        min-width: 80px;
+        padding: 14px 8px;
+      }
+      
+      .time-number {
+        font-size: 2rem;
+      }
+      
+      .letter {
+        padding: 24px 20px;
+      }
+      
+      .letter p {
+        font-size: 1rem;
+      }
+      
+      .heart {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .timer-values {
+        gap: 8px;
+      }
+      
+      .time-box {
+        min-width: 70px;
+        padding: 12px 6px;
+      }
+      
+      .time-number {
+        font-size: 1.8rem;
+      }
+      
+      body {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Звездный фон -->
+  <div class="stars" id="stars"></div>
+  
+  <!-- Декоративные сердечки -->
+  <div class="heart">❤️</div>
+  <div class="heart">💖</div>
+  <div class="heart">💗</div>
+  <div class="heart">💓</div>
+
+  <div class="container">
+    <div class="image-wrapper">
+      <img src="img.jpg" alt="Мы вместе">
+    </div>
+
+    <div class="letter">
+      <p><strong>Жаннелёк,</strong></p>
+      <p>я хочу поблагодарить тебя за всё, что мы прошли вместе ❤️</p>
+      <p>Ты представляешь, сегодня уже 15 декабря! Время пролетает совершенно незаметно и до нашей встречи остаются считанные дни 🥹</p>
+      <p>Этот сайт служит напоминанием тебе о том, что ты самый главный лучик света в моей жизни!</p>
+      <p>Ты самая красивая, прелестная, удивительная и любвеобильная девочка 🥺</p>
+      <p>И это не всё! В тебе сочетается столько лучших качеств, что я даже не знаю, как мне так сильно с тобой повезло 🥹❤️</p>
+      <p>Мы тааак долго хотели друг друга увидеть и боже, я в таком предвкушении — я прям не могу, сейчас взорвусь… ООООЧЕНЬ жду!!</p>
+      <p>Милая, я люблю тебя и только тебя. Ты моя принцесса, моя маленькая кошечка и самый лучший подарок в этой жизни ❤️</p>
+      <p>Благодарю тебя за то, что ты есть в моей жизни и украшаешь её каждый день 🥰</p>
+    </div>
+
+    <div class="timer">
+      <div class="timer-title">До нашей встречи осталось</div>
+      <div class="timer-values">
+        <div class="time-box"><div class="time-number" id="days">0</div><div class="time-label">дней</div></div>
+        <div class="time-box"><div class="time-number" id="hours">0</div><div class="time-label">часов</div></div>
+        <div class="time-box"><div class="time-number" id="minutes">0</div><div class="time-label">минут</div></div>
+        <div class="time-box"><div class="time-number" id="seconds">0</div><div class="time-label">секунд</div></div>
+      </div>
+    </div>
+
+    <footer>
+      С самой настоящей любовью,<br>
+      твой Эльнар 💘
+    </footer>
+  </div>
+
+  <script>
+    // Создание звездного фона
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      const starsCount = 150;
+      
+      for (let i = 0; i < starsCount; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        
+        // Случайные размеры и позиции
+        const size = Math.random() * 3 + 1;
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.left = `${x}%`;
+        star.style.top = `${y}%`;
+        
+        // Разная продолжительность анимации для разнообразия
+        star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        
+        starsContainer.appendChild(star);
+      }
+    }
+    
+    // Анимация появления строк письма
+    const lines = document.querySelectorAll('.letter p');
+    lines.forEach((line, index) => {
+      setTimeout(() => {
+        line.classList.add('show');
+      }, 800 + index * 600);
+    });
+
+    // Обновление таймера
+    function updateTimer() {
+      const target = new Date('2025-12-24T18:00:00Z');
+      const now = new Date();
+      const diff = target - now;
+      
+      if (diff <= 0) {
+        document.querySelector('.timer-title').textContent = "Мы встретились! 💖";
+        document.getElementById('days').textContent = "0";
+        document.getElementById('hours').textContent = "0";
+        document.getElementById('minutes').textContent = "0";
+        document.getElementById('seconds').textContent = "0";
+        return;
+      }
+
+      document.getElementById('days').textContent = Math.floor(diff / (1000 * 60 * 60 * 24));
+      document.getElementById('hours').textContent = Math.floor((diff / (1000 * 60 * 60)) % 24).toString().padStart(2, '0');
+      document.getElementById('minutes').textContent = Math.floor((diff / (1000 * 60)) % 60).toString().padStart(2, '0');
+      document.getElementById('seconds').textContent = Math.floor((diff / 1000) % 60).toString().padStart(2, '0');
+    }
+
+    // Инициализация
+    createStars();
+    updateTimer();
+    setInterval(updateTimer, 1000);
+  </script>
+</body>
+</html>
